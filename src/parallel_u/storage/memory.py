@@ -31,3 +31,5 @@ class MemoryStore:
     def get_preferences(self, user_id: str) -> Optional[PreferencesOut]:
         with self._lock:
             return self._prefs.get(user_id)
+
+store = MemoryStore()
