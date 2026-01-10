@@ -1,0 +1,21 @@
+[project]
+name = "parallel-u"
+version = "0.1.0"
+description = "Parallel U MVP backend"
+requires-python = ">=3.10"
+
+dependencies = [
+  "fastapi",
+  "uvicorn",
+  "pydantic",
+  "requests",
+  "httpx",
+  "beautifulsoup4",
+  "python-dotenv",
+]
+
+[tool.uv]
+dev-dependencies = [
+  "black",
+  "ruff",
+]
