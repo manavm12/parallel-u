@@ -1,16 +1,16 @@
 [project]
 name = "parallel-u"
 version = "0.1.0"
-description = "Parallel U MVP backend"
+description = "Parallel U MVP backend - Your digital clone that explores the web"
 requires-python = ">=3.10"
 
 dependencies = [
   "fastapi",
   "uvicorn",
   "pydantic",
-  "requests",
+  "pydantic-settings",
   "httpx",
-  "beautifulsoup4",
+  "openai",
   "python-dotenv",
 ]
 
