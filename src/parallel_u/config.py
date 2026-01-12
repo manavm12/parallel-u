@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     debug: bool = False
 
     class Config:
-        env_file = ".env"
+        env_file = ".env.local"
         env_file_encoding = "utf-8"
 
 

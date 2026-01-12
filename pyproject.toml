@@ -12,6 +12,7 @@ dependencies = [
   "httpx",
   "openai",
   "python-dotenv",
+  "streamlit",
 ]
 
 [tool.uv]

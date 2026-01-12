@@ -15,6 +15,7 @@ from parallel_u.schemas import (
     RunResponse,
     ChatRequest,
     ChatResponse,
+    SynthesizeRequest,
 )
 from parallel_u.clients import OpenAIClient, MinoClient
 from parallel_u.services import SessionStore
@@ -59,6 +60,30 @@ app = FastAPI(
 async def health():
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+@app.post("/v1/plan")
+async def plan_exploration(request: RunRequest):
+    """
+    Create a browsing plan using OpenAI.
+    
+    Returns the goal and list of browsing tasks without executing them.
+    """
+    if openai_client is None:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+    
+    try:
+        plan = openai_client.plan(
+            topics=request.topics,
+            depth=request.depth,
+            time_budget_min=request.time_budget_min,
+        )
+        return {
+            "goal": plan.goal,
+            "tasks": [{"website": t.website, "instructions": t.instructions} for t in plan.tasks]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Planning failed: {str(e)}")
 
 
 @app.post("/v1/run", response_model=RunResponse)
@@ -190,6 +215,41 @@ async def chat(request: ChatRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}")
+
+
+@app.post("/v1/synthesize", response_model=RunResponse)
+async def synthesize_results(request: SynthesizeRequest):
+    """
+    Synthesize browsing results into a condensed brief.
+    
+    Takes browsing results and creates a personalized intelligence brief.
+    """
+    if openai_client is None:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+    
+    try:
+        brief = openai_client.synthesize(
+            goal=request.goal,
+            topics=request.topics,
+            browsing_results=request.browsing_results,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Synthesis failed: {str(e)}")
+    
+    # Create session for follow-up chat
+    session_id = session_store.create(
+        user_id=request.user_id,
+        topics=request.topics,
+        goal=request.goal,
+        brief=brief,
+        browsing_results=request.browsing_results,
+    )
+    
+    return RunResponse(
+        goal=request.goal,
+        brief=brief,
+        session_id=session_id,
+    )
 
 
 @app.delete("/v1/session/{session_id}")

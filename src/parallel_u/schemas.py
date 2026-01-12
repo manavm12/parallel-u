@@ -85,3 +85,15 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str = Field(..., description="AI response to the question")
     session_id: str = Field(..., description="Session ID for continued chat")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Synthesize endpoint schema
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+class SynthesizeRequest(BaseModel):
+    user_id: str = Field(..., description="Unique user identifier")
+    goal: str = Field(..., description="The exploration goal")
+    topics: list[str] = Field(..., description="List of topics explored")
+    browsing_results: list[dict] = Field(..., description="Results from browser automation")

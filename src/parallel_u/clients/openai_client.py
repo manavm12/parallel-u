@@ -24,7 +24,8 @@ class OpenAIClient:
 Your job is to create a focused browsing plan based on the user's interests. You must output valid JSON matching the schema exactly.
 
 Guidelines:
-- Choose 1-2 relevant websites to browse (for MVP, prefer Hacker News or Reddit as they have rich content)
+- Choose 1-3 relevant websites to browse based on the user's topics (pick the most authoritative and content-rich sources for those specific topics)
+- Consider diverse sources: news sites, forums, blogs, documentation sites, GitHub, research papers, community discussions, etc.
 - Write clear, specific browsing instructions that a web automation tool can follow
 - The goal should be specific and actionable for today's exploration
 - Match the depth to the user's preference (shallow = headlines only, medium = read top discussions, deep = explore comments and linked articles)
